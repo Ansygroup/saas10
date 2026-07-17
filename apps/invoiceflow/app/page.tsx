@@ -50,6 +50,10 @@ const CONFIG = {
       "label": "Pricing"
     },
     {
+      "href": "/blog",
+      "label": "Blog"
+    },
+    {
       "href": "#faq",
       "label": "FAQ"
     }
