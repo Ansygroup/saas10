@@ -17,11 +17,12 @@
 - **Supabase keys** — Composio Supabase token returns 403 on Management API. Not extractable.
 
 ## To finish (user provides tokens)
-1. `./deploy_gumroad_env.sh <VERCEL_TOKEN>` → pushes Gumroad URLs to all 10 apps.
-2. `vercel --prod -t $TOKEN -c <app>` for each → live payments.
-3. Or: provide `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY` + `STRIPE_WEBHOOK_SECRET` →
-   `python setup_stripe.py` → `./deploy_env.sh <SEC> <PUB> <WHSEC>` → redeploy.
+1. Put live Vercel token in `~/.hermes/vercel_token` (not REDACTED).
+2. `./ship_all.sh <TOKEN>` → sets Gumroad env + redeploys all 10 (one command).
+   OR run `./watch_token.sh` to auto-ship the moment a live token appears.
+3. Or: provide Stripe keys → `python setup_stripe.py` → `./deploy_env.sh <SEC> <PUB> <WHSEC>` → redeploy.
 
 ## ZCode integration
 - ZCode at `C:/Users/ansy0/.zcode` has `deploy-to-vercel` + `vercel-*` skills.
-- Can deploy saas10 apps via ZCode instead of CLI.
+- Added new ZCode skill `saas10-deploy` (companion to this project).
+- Can deploy saas10 apps via ZCode or via `./ship_all.sh`.
