@@ -1,5 +1,6 @@
 // Shared UI components (React + Tailwind). Copy into each app or import via workspace.
-import React from 'react';
+'use client';
+import React, { useState } from 'react';
 
 export function Button({ children, variant = 'primary', className = '', ...props }: any) {
   const base = 'inline-flex items-center justify-center rounded-lg px-5 py-2.5 text-sm font-semibold transition';
@@ -92,5 +93,36 @@ export function FeatureGrid({ features }: any) {
         ))}
       </div>
     </Section>
+  );
+}
+
+// Email waitlist — no DB needed. Posts to Formspree/Getform via NEXT_PUBLIC_WAITLIST_URL.
+export function Waitlist({ title = 'Join the waitlist', placeholder = 'you@email.com' }: any) {
+  const [email, setEmail] = useState('');
+  const [done, setDone] = useState(false);
+  const url = process.env.NEXT_PUBLIC_WAITLIST_URL;
+  async function submit(e: any) {
+    e.preventDefault();
+    if (!url) return setDone(true); // graceful if not configured
+    await fetch(url, {
+      method: 'POST',
+      headers: { Accept: 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+    setDone(true);
+  }
+  if (done) return <p className="text-sm text-green-600">✓ You're on the list!</p>;
+  return (
+    <form onSubmit={submit} className="flex gap-2 max-w-md">
+      <input
+        type="email"
+        required
+        value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        placeholder={placeholder}
+        className="flex-1 rounded-lg border border-slate-300 px-3 py-2 text-sm"
+      />
+      <Button type="submit">Notify me</Button>
+    </form>
   );
 }
