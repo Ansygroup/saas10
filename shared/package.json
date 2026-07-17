@@ -1,0 +1,24 @@
+{
+  "name": "@saas10/shared",
+  "version": "1.0.0",
+  "private": true,
+  "main": "index.ts",
+  "types": "index.ts",
+  "exports": {
+    ".": "./index.ts",
+    "./ui": "./ui/index.tsx",
+    "./stripe": "./stripe.ts",
+    "./db": "./db.ts"
+  },
+  "dependencies": {
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "stripe": "^16.12.0",
+    "@stripe/stripe-js": "^4.10.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.6.3",
+    "@types/react": "^18.3.12",
+    "@types/node": "^22.9.0"
+  }
+}

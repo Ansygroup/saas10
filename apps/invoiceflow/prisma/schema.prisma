@@ -1,0 +1,33 @@
+// Prisma schema — uses Supabase Postgres.
+// Set DATABASE_URL in .env.local to your Supabase connection string (pooler).
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id         String   @id @default(uuid())
+  email      String   @unique
+  name       String?
+  stripeId   String?  @map("stripe_id") // Stripe customer id
+  plan       String   @default("free")
+  createdAt  DateTime @default(now()) @map("created_at")
+  invoices   Invoice[]
+}
+
+model Invoice {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  number     String
+  client     String
+  amount     Int // cents
+  status     String   @default("draft") // draft | sent | paid | overdue
+  createdAt  DateTime @default(now()) @map("created_at")
+  user       User     @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@index([userId])
+}
