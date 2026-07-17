@@ -1,24 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 import Stripe from 'stripe';
-import { createClient } from '../../../lib/supabase/server';
-import { prisma } from '../../../lib/prisma';
 
 const secret = process.env.STRIPE_SECRET_KEY!;
 
+// Stripe-only billing portal: customer identified by email in request body.
 export async function POST(req: NextRequest) {
   const stripe = new Stripe(secret, { apiVersion: '2024-06-20' });
-  const supabase = createClient();
-  const {
-    data: { user },
-  } = await supabase.auth.getUser();
-  if (!user) return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+  const { email } = await req.json().catch(() => ({ email: null }));
+  if (!email) return NextResponse.json({ error: 'email required' }, { status: 400 });
 
-  const dbUser = await prisma.user.findUnique({ where: { id: user.id } });
-  if (!dbUser?.stripeId) {
-    return NextResponse.json({ error: 'No Stripe customer' }, { status: 400 });
+  // find or create customer
+  const customers = await stripe.customers.list({ email, limit: 1 });
+  let customer = customers.data[0];
+  if (!customer) {
+    customer = await stripe.customers.create({ email });
   }
   const session = await stripe.billingPortal.sessions.create({
-    customer: dbUser.stripeId,
+    customer: customer.id,
     return_url: `${req.headers.get('origin')}/dashboard`,
   });
   return NextResponse.json({ url: session.url });

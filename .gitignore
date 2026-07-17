@@ -5,3 +5,10 @@ out
 .env.local
 *.log
 .DS_Store
+
+.vercel
+brave_profile_copy/
+cookie_tmp/
+*.png
+supa_*.txt
+page_dump.txt

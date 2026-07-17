@@ -49,7 +49,7 @@ export default async function Dashboard() {
         {invoices.length === 0 && (
           <p className="text-sm text-slate-400">No invoices yet. Create your first one.</p>
         )}
-        {invoices.map((inv) => (
+        {invoices.map((inv: { id: string; number: string; client: string; amount: number; status: string }) => (
           <Card key={inv.id} className="flex items-center justify-between">
             <span className="text-sm text-slate-700">
               #{inv.number} · {inv.client} · ${(inv.amount / 100).toFixed(2)} ·{' '}

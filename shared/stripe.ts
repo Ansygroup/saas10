@@ -1,5 +1,4 @@
-// Stripe-ready checkout helper. Uses test mode by default.
-// Set NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY and STRIPE_SECRET_KEY in .env.local.
+// Stripe-ready checkout helper. Works without Supabase — uses email from the caller.
 import { loadStripe, Stripe } from '@stripe/stripe-js';
 
 let stripePromise: Promise<Stripe | null> | null = null;
@@ -17,12 +16,13 @@ export function getStripe(): Promise<Stripe | null> {
 }
 
 export interface CheckoutPayload {
-  priceId: string;
+  app: string;
+  email?: string;
   successUrl?: string;
   cancelUrl?: string;
 }
 
-// Calls your API route /api/checkout to create a Stripe Checkout Session.
+// Calls your API route /api/checkout which returns the Gumroad product URL.
 export async function startCheckout(payload: CheckoutPayload): Promise<void> {
   const res = await fetch('/api/checkout', {
     method: 'POST',
@@ -33,11 +33,10 @@ export async function startCheckout(payload: CheckoutPayload): Promise<void> {
     const err = await res.json().catch(() => ({}));
     throw new Error(err.message || 'Checkout failed');
   }
-  const { sessionId } = await res.json();
-  const stripe = await getStripe();
-  if (!stripe) {
-    alert('Stripe is not configured. Add your keys to .env.local to enable real payments.');
+  const { url } = await res.json();
+  if (!url) {
+    alert('Payment not configured for this app yet.');
     return;
   }
-  await stripe.redirectToCheckout({ sessionId });
+  window.location.href = url;
 }

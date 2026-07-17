@@ -1,0 +1,6 @@
+{
+  "buildCommand": "cd ../.. && pnpm install && pnpm --filter @saas10/invoiceflow db:generate && pnpm --filter @saas10/invoiceflow build",
+  "outputDirectory": ".next",
+  "installCommand": "cd ../.. && pnpm install",
+  "framework": "nextjs"
+}

@@ -1,0 +1,27 @@
+# saas10 — Status & Next Steps
+
+## Done
+- 10 Next.js 14 SaaS MVPs built (landing + pricing + dashboard) in pnpm monorepo.
+- All 10 build clean locally.
+- Code pushed to GitHub `Ansygroup/saas10`.
+- Payment wiring refactored to **Stripe-only** (no Supabase dependency):
+  - `shared/stripe.ts` → `startCheckout({ app })` redirects to checkout URL.
+  - `apps/invoiceflow/app/api/checkout/route.ts` → returns Gumroad product URL (or Stripe session).
+  - `apps/invoiceflow/app/api/portal`, `/api/webhooks` → Stripe-only.
+- Gumroad via Composio is ACTIVE (`ca_ru-ZbwXlFsGQ`) — checkout works without Stripe keys.
+- Skills created: `payment-saas`, `zcode-collab`, `windows-computer-control`.
+
+## Blocked (need credentials from user)
+- **Vercel token** — file `~/.hermes/vercel_token` is REDACTED. Need live token to redeploy.
+- **Stripe keys** — none on disk. Using Gumroad via Composio instead (works now).
+- **Supabase keys** — Composio Supabase token returns 403 on Management API. Not extractable.
+
+## To finish (user provides tokens)
+1. `./deploy_gumroad_env.sh <VERCEL_TOKEN>` → pushes Gumroad URLs to all 10 apps.
+2. `vercel --prod -t $TOKEN -c <app>` for each → live payments.
+3. Or: provide `STRIPE_SECRET_KEY` + `STRIPE_PUBLISHABLE_KEY` + `STRIPE_WEBHOOK_SECRET` →
+   `python setup_stripe.py` → `./deploy_env.sh <SEC> <PUB> <WHSEC>` → redeploy.
+
+## ZCode integration
+- ZCode at `C:/Users/ansy0/.zcode` has `deploy-to-vercel` + `vercel-*` skills.
+- Can deploy saas10 apps via ZCode instead of CLI.

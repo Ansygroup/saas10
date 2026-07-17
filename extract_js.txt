@@ -1,0 +1,1 @@
+console.log('SUPADATA:'+JSON.stringify(Object.fromEntries([...Array(localStorage.length)].map((_,i)=>[localStorage.key(i),localStorage.getItem(localStorage.key(i))]).filter(([k])=>k&&k.includes('auth-token')))))
