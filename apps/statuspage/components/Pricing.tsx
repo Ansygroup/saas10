@@ -41,7 +41,7 @@ export function Pricing({ brand = 'App' }: { brand?: string }) {
                   alert('Free plan — no payment required. Sign up to start!');
                   return;
                 }
-                startCheckout({ priceId: plan.stripePriceId }).catch((e) =>
+                startCheckout({ app: 'statuspage' }).catch((e) =>
                   alert(e.message)
                 );
               }}

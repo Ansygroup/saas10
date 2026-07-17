@@ -1,4 +1,4 @@
-import { Badge, Button, Footer, Hero, Navbar, Section, FeatureGrid } from '@saas10/shared/ui';
+import { Badge, Button, Footer, Hero, Navbar, Section, FeatureGrid, Waitlist } from '@saas10/shared/ui';
 import { Pricing } from '../components/Pricing';
 
 const CONFIG = {
@@ -48,6 +48,10 @@ const CONFIG = {
     {
       "href": "#pricing",
       "label": "Pricing"
+    },
+    {
+      "href": "/blog",
+      "label": "Blog"
     }
   ]
 };
@@ -73,6 +77,13 @@ export default function Home() {
       <div id="pricing">
         <Pricing brand={CONFIG.brand} />
       </div>
+      <Section className="text-center">
+        <h2 className="text-2xl font-bold text-slate-900">Get launch updates</h2>
+        <p className="mt-2 text-slate-600">No spam. One email when we ship something useful.</p>
+        <div className="mt-6 flex justify-center">
+          <Waitlist />
+        </div>
+      </Section>
       <Section className="text-center">
         <h2 className="text-2xl font-bold text-slate-900">Ready to get started?</h2>
         <p className="mt-2 text-slate-600">Join thousands of teams already using {CONFIG.brand}.</p>
